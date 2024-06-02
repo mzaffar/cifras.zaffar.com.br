@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-main {
+  background-color: #5c6f0d;
+}
+
+.color-main{
+    color: #5c6f0d;
+}
+
+input:focus, textarea:focus {
+    outline:none;
+}
+
+.chord{
+  display: flex;
+  width: 66px;
+  height: 80px;
+  position: relative;
+  margin: auto;
+  background-image: url('/public/chords_bg.png');
+  font-size: 1rem;
+}
+
+.note{
+  width: 12px;
+  height: 12px;
+  background-color: #000;
+  border-radius: 500px;
+  text-align: center;
+  font-size: .6rem;
+  line-height: .8rem;
+  color: #fff;
+
+}
+
+.string-0{
+  position: absolute;
+  left: -4px;
+  transform: translateX(-50%);
+}
+
+.string-1{
+  position: absolute;
+  left: 9px;
+  transform: translateX(-50%);
+}
+
+.string-2{
+  position: absolute;
+  left: 22px;
+  transform: translateX(-50%);
+}
+
+.string-3{
+  position: absolute;
+  left: 35px;
+  transform: translateX(-50%);
+}
+
+.string-4{
+  position: absolute;
+  left: 48px;
+  transform: translateX(-50%);
+}
+
+.string-5{
+  position: absolute;
+  left: 61px;
+  transform: translateX(-50%);
+}
+
+.fret-0{
+  position: absolute;
+  top: 8px;
+  transform: translateY(-50%);
+}
+
+.fret-1{
+  position: absolute;
+  top: 11px;
+  transform: translateY(-50%);
+}
+
+.fret-2{
+  position: absolute;
+  top: 27px;
+  transform: translateY(-50%);
+}
+
+.fret-3{
+  position: absolute;
+  top: 43px;
+  transform: translateY(-50%);
+}
+
+.fret-4{
+  position: absolute;
+  top: 59px;
+  transform: translateY(-50%);
+}
+
+.fret-5{
+  position: absolute;
+  top: 75px;
+  transform: translateY(-50%);
+}
+
+.fret-indicator{
+  position: absolute;
+  top: 19px;
+  left: -14px;
+  color: #000;
+  font-size: .6rem;
+  font-weight: bold;
+}
+
+pre > b{
+  color: #5c6f0d;
+  cursor: pointer;
+}
