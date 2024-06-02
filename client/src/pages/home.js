@@ -25,7 +25,7 @@ function Home() {
 
   const getFolders = () => {
     setLoading(true);
-    fetch("http://localhost:9001/folder/list")
+    fetch("https://cifras.zaffar.com.br:9001/folder/list")
       .then((res) => res.json())
       .then((res) => {
         setFolders(res);
@@ -37,7 +37,7 @@ function Home() {
     if (folderData.name === "") return;
     setLoading(true);
 
-    fetch("http://localhost:9001/folder/create", {
+    fetch("https://cifras.zaffar.com.br:9001/folder/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -76,7 +76,7 @@ function Show() {
   const getMusicFile = () => {
     setLoading(true);
     fetch(
-      `http://localhost:9001/music/show?folder=${encodeURIComponent(
+      `https://cifras.zaffar.com.br:9001/music/show?folder=${encodeURIComponent(
         folder
       )}&artist=${encodeURIComponent(artist)}&music=${encodeURIComponent(
         music
@@ -94,7 +94,7 @@ function Show() {
   const reimport = () => {
     setLoading(true);
     fetch(
-      `http://localhost:9001/music/import?folder=${folder}&url=${musicData.music.url_clifraclub}`
+      `https://cifras.zaffar.com.br:9001/music/import?folder=${folder}&url=${musicData.music.url_clifraclub}`
     )
       .then((res) => res.json())
       .then((res) => {
@@ -108,7 +108,7 @@ function Show() {
 
   const updateMusicHandler = () => {
     setLoading(true);
-    fetch(`http://localhost:9001/music/update`, {
+    fetch(`https://cifras.zaffar.com.br:9001/music/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -129,7 +129,9 @@ function Show() {
 
   const deleteMusicHandler = () => {
     setLoading(true);
-    fetch("http://localhost:9001/music/delete?path=" + musicData.path)
+    fetch(
+      "https://cifras.zaffar.com.br:9001/music/delete?path=" + musicData.path
+    )
       .then((res) => {
         if (res.status !== 200) {
           res

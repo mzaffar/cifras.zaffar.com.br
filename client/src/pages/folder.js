@@ -32,7 +32,7 @@ function Folder() {
 
   const getFiles = () => {
     fetch(
-      `http://localhost:9001/folder/artists?folder=${encodeURIComponent(
+      `https://cifras.zaffar.com.br:9001/folder/artists?folder=${encodeURIComponent(
         folder
       )}`
     )
@@ -43,7 +43,7 @@ function Folder() {
   const importMusicHandler = () => {
     setLoading(true);
     fetch(
-      `http://localhost:9001/music/import?folder=${folder}&url=${musicLink}`
+      `https://cifras.zaffar.com.br:9001/music/import?folder=${folder}&url=${musicLink}`
     )
       .then((res) => res.json())
       .then((res) => {
@@ -54,7 +54,7 @@ function Folder() {
 
   const deleteFolderHandler = () => {
     setLoading(true);
-    fetch(`http://localhost:9001/folder/delete?folder=${folder}`)
+    fetch(`https://cifras.zaffar.com.br:9001/folder/delete?folder=${folder}`)
       .then((res) => res.json())
       .then((res) => {
         setLoading(false);

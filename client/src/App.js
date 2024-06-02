@@ -4,7 +4,7 @@ function App() {
   const [folderData, setFolderData] = useState({ name: "" });
 
   // useEffect(() => {
-  //   fetch("http://localhost:9001/testAPI")
+  //   fetch("https://cifras.zaffar.com.br:9001/testAPI")
   //     .then((res) => res.text())
   //     .then((res) => console.log("res"));
   // }, []);
@@ -12,7 +12,7 @@ function App() {
   const createFolderHandler = () => {
     if (folderData.name === "") return;
 
-    fetch("http://localhost:9001/folder/create", {
+    fetch("https://cifras.zaffar.com.br:9001/folder/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
