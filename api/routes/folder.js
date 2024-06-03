@@ -39,7 +39,7 @@ router.get("/list", async (req, res) => {
 
     res.status(200).json(folders);
   } else {
-    res.status(400).json({ error: "Folder not exists" });
+    res.status(200).json([]);
   }
 });
 
@@ -73,7 +73,7 @@ router.get("/artists", async (req, res) => {
 
     res.status(200).json(files);
   } else {
-    res.status(400).json({ error: "Folder not exists" });
+    res.status(200).json([]);
   }
 });
 
