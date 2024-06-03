@@ -1,3 +1,3 @@
 export const config = {
-  api_url: "http://localhost:9001",
+  api_url: "http://cifras.zaffar.com.br:9001",
 };

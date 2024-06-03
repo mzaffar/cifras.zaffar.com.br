@@ -8,5 +8,5 @@ services:
   client:
     build: ./client
     ports:
-      - "8081:80"
+      - "80:80"
     restart: always
