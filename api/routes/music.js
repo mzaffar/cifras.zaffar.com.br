@@ -61,7 +61,7 @@ router.get("/import", async (req, res) => {
   });
 
   const page = await browser.newPage();
-  await page.goto(url, { timeout: 60000, waitUntil: "networkidle2" });
+  await page.goto(url, { waitUntil: "networkidle2" });
   // await page.waitForSelector(".cifra_acordes > ul > li > .chord");
   const html = await page.content();
 
