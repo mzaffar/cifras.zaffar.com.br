@@ -30,6 +30,8 @@ router.post("/create", async (req, res) => {
 router.get("/list", async (req, res) => {
   const folder = `./files`;
 
+  console.log("folder list");
+
   if (fs.existsSync(folder)) {
     const folders = fs
       .readdirSync(folder)

@@ -5,6 +5,7 @@ import MainContainer from "../components/MainContainer";
 import Modal from "../components/Modal";
 import SimpleButton from "../components/SimpleButton";
 import Title from "../components/Title";
+import { config } from "../config";
 import { slugToCamelCase } from "../utils";
 
 function Home() {
@@ -25,7 +26,7 @@ function Home() {
 
   const getFolders = () => {
     setLoading(true);
-    fetch("https://cifras.zaffar.com.br:9001/folder/list")
+    fetch(`${config.api_url}/folder/list`)
       .then((res) => res.json())
       .then((res) => {
         setFolders(res);
@@ -37,7 +38,7 @@ function Home() {
     if (folderData.name === "") return;
     setLoading(true);
 
-    fetch("https://cifras.zaffar.com.br:9001/folder/create", {
+    fetch(`${config.api_url}/folder/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

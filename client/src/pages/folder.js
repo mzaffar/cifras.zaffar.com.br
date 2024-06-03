@@ -7,6 +7,7 @@ import MainContainer from "../components/MainContainer";
 import Modal from "../components/Modal";
 import SimpleButton from "../components/SimpleButton";
 import Title from "../components/Title";
+import { config } from "../config";
 import { filePathToMusicName, filePathToUrl, slugToCamelCase } from "../utils";
 
 function Folder() {
@@ -32,9 +33,7 @@ function Folder() {
 
   const getFiles = () => {
     fetch(
-      `https://cifras.zaffar.com.br:9001/folder/artists?folder=${encodeURIComponent(
-        folder
-      )}`
+      `${config.api_url}/folder/artists?folder=${encodeURIComponent(folder)}`
     )
       .then((res) => res.json())
       .then((res) => setMusics(res));
@@ -42,9 +41,7 @@ function Folder() {
 
   const importMusicHandler = () => {
     setLoading(true);
-    fetch(
-      `https://cifras.zaffar.com.br:9001/music/import?folder=${folder}&url=${musicLink}`
-    )
+    fetch(`${config.api_url}/music/import?folder=${folder}&url=${musicLink}`)
       .then((res) => res.json())
       .then((res) => {
         setLoading(false);
@@ -54,7 +51,7 @@ function Folder() {
 
   const deleteFolderHandler = () => {
     setLoading(true);
-    fetch(`https://cifras.zaffar.com.br:9001/folder/delete?folder=${folder}`)
+    fetch(`${config.api_url}/folder/delete?folder=${folder}`)
       .then((res) => res.json())
       .then((res) => {
         setLoading(false);
