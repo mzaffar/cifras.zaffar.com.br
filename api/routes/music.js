@@ -4,7 +4,7 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 const path = require("path");
 const slugify = require("slugify");
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const { checkIfFolderIsEmpty } = require("../utils");
 
 router.get("/show", async (req, res) => {
@@ -51,14 +51,18 @@ router.get("/import", async (req, res) => {
 
   const url = req.query.url;
   const browser = await puppeteer.launch({
-    executablePath: "/usr/bin/google-chrome-stable",
+    executablePath: "/usr/bin/google-chrome",
     headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--dns-prefetch-disable",
+    ],
   });
 
   const page = await browser.newPage();
-  await page.goto(url);
-  await page.waitForSelector(".cifra_acordes > ul > li > .chord");
+  await page.goto(url, { timeout: 60000, waitUntil: "networkidle2" });
+  // await page.waitForSelector(".cifra_acordes > ul > li > .chord");
   const html = await page.content();
 
   const $ = cheerio.load(html);
