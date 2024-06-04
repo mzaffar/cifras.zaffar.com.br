@@ -14,5 +14,7 @@ services:
     ports:
       - "80:80"
     restart: always
+
 volumes:
   api_files:
+    driver: local

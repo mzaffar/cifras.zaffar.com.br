@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ChordPlay from "./ChordPlay";
 
 function Chord({ chord, key }) {
   const [fretMinMax, setFretMinMax] = useState({
@@ -58,15 +59,17 @@ function Chord({ chord, key }) {
 
   return (
     <div className="p-2">
-      <div className="bg-slate-200 px-4 pb-2 rounded">
-        <div className="text-center text-sm text-slate-800">{chord.name}</div>
-        <div className="relative">
-          <div className="chord">
-            <FretIndicator notes={chord.notes} />
-            <Notes />
+      <ChordPlay chord={chord}>
+        <div className="bg-slate-200 px-4 pb-2 rounded">
+          <div className="text-center text-sm text-slate-800">{chord.name}</div>
+          <div className="relative">
+            <div className="chord">
+              <FretIndicator notes={chord.notes} />
+              <Notes />
+            </div>
           </div>
         </div>
-      </div>
+      </ChordPlay>
     </div>
   );
 }
