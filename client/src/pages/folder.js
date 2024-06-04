@@ -9,7 +9,6 @@ import SimpleButton from "../components/SimpleButton";
 import Title from "../components/Title";
 import { config } from "../config";
 import { filePathToMusicName, filePathToUrl, slugToCamelCase } from "../utils";
-
 function Folder() {
   const inputRef = useRef(null);
   const navigate = useNavigate();

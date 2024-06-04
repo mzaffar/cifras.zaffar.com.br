@@ -1,4 +1,4 @@
-import { mdiPencil, mdiTrashCan } from "@mdi/js";
+import { mdiArrowLeftCircle, mdiDotsVertical, mdiPencil } from "@mdi/js";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -7,6 +7,9 @@ import FontSize from "../components/FontSize";
 import Header from "../components/Header";
 import IconButton from "../components/IconButton";
 import MainContainer from "../components/MainContainer";
+import Modal from "../components/Modal";
+import ScrollDown from "../components/ScrollDown";
+import Scroller from "../components/Scroller";
 import ShowChord from "../components/ShowChord";
 import SimpleButton from "../components/SimpleButton";
 import { config } from "../config";
@@ -24,6 +27,7 @@ function Show() {
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [showChord, setShowChord] = useState();
   const [showChordPosition, setShowChordPosition] = useState();
+  const [showOptions, setShowOptions] = useState(false);
 
   useEffect(() => {
     getMusicFile();
@@ -59,11 +63,6 @@ function Show() {
         const y = event.clientY;
         const bodyX = x + window.scrollX;
         const bodyY = y + window.scrollY;
-
-        console.log({
-          x: bodyX,
-          y: bodyY,
-        });
       }
     };
 
@@ -211,12 +210,6 @@ function Show() {
   return (
     <MainContainer>
       <Header>
-        <SimpleButton
-          label={"Re-importar"}
-          onClick={() => reimport()}
-          color="bg-blue-800"
-          loading={loading}
-        />
         <IconButton
           path={mdiPencil}
           size={"1rem"}
@@ -225,13 +218,40 @@ function Show() {
           loading={loading}
         />
         <IconButton
-          path={mdiTrashCan}
+          path={mdiDotsVertical}
           size={"1rem"}
-          color="bg-red-800"
-          onClick={() => deleteMusicHandler()}
-          loading={loading}
+          color="bg-blue-800"
+          onClick={() => setShowOptions(true)}
         />
       </Header>
+
+      {showOptions && (
+        <Modal title="Opções">
+          <div className="p-2 space-y-2">
+            <SimpleButton
+              label="Excluir música"
+              className="text-center"
+              color="bg-red-800"
+              onClick={() => deleteMusicHandler()}
+            />
+            <SimpleButton
+              label={"Re-importar"}
+              onClick={() => reimport()}
+              className="text-center"
+              color="bg-blue-800"
+              loading={loading}
+            />
+
+            <SimpleButton
+              label="Fechar"
+              className="text-center"
+              color="bg-slate-500"
+              onClick={() => setShowOptions(false)}
+            />
+          </div>
+        </Modal>
+      )}
+
       {showChord && (
         <ShowChord
           musicData={musicData}
@@ -239,12 +259,25 @@ function Show() {
           showChordPosition={showChordPosition}
         />
       )}
-      <div className="bg-slate-800 p-2">
-        <div className="container mx-auto text-slate-400 text-2xl">
-          {musicData.music.name}
-        </div>
-        <div className="container mx-auto text-slate-400 text-xs">
-          {musicData.artist.name}
+      <div className="bg-slate-800 p-2 ">
+        <div className="container mx-auto flex items-center">
+          <div>
+            <IconButton
+              color="bg-slate-800"
+              path={mdiArrowLeftCircle}
+              size={"1.5rem"}
+              className={"py-3 text-slate-500"}
+              onClick={() => navigate(`/${folder}`)}
+            />
+          </div>
+          <div>
+            <div className="text-slate-400 text-2xl">
+              {musicData.music.name}
+            </div>
+            <div className="text-slate-400 text-xs">
+              {musicData.artist.name}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -268,7 +301,13 @@ function Show() {
             )}
           </div>
           <div className="flex space-x-2">
+            {/* Scroll Down */}
+            <ScrollDown />
+            {/* Scroller */}
+            <Scroller />
+            {/* Font Size */}
             <FontSize fontSize={fontSize} setFontSize={setFontSize} />
+            {/* Cifra Club Button */}
             <SimpleButton
               label="Cifra Club"
               color="bg-slate-800"
@@ -278,6 +317,8 @@ function Show() {
             />
           </div>
         </div>
+
+        {/* Music */}
         <pre
           className={
             "py-4 px-2 text-slate-400 " +
@@ -286,6 +327,8 @@ function Show() {
           }
           dangerouslySetInnerHTML={{ __html: musicData.music.music + "<br>" }}
         ></pre>
+
+        {/* Textarea */}
         <textarea
           ref={textareaRef}
           className={
@@ -295,6 +338,7 @@ function Show() {
           onChange={(e) => editMusicHandler(e.target.value)}
         ></textarea>
 
+        {/* Chords */}
         <div>
           <div className="flex flex-wrap">
             {musicData.music.chords.map((chord, i) => {

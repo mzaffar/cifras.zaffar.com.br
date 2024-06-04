@@ -5,6 +5,28 @@ const fs = require("fs");
 const path = require("path");
 const slugify = require("slugify");
 
+/*
+  List all folders
+*/
+router.get("/list", async (req, res) => {
+  const folder = `./files`;
+
+  console.log("folder list");
+
+  if (fs.existsSync(folder)) {
+    const folders = fs
+      .readdirSync(folder)
+      .filter((file) => fs.statSync(`${folder}/${file}`).isDirectory());
+
+    res.status(200).json(folders);
+  } else {
+    res.status(200).json([]);
+  }
+});
+
+/*
+  Create a new folder
+*/
 router.post("/create", async (req, res) => {
   if (!req.body.name) {
     res.status(400).json({ error: "Name is required" });
@@ -24,22 +46,6 @@ router.post("/create", async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }
-});
-
-router.get("/list", async (req, res) => {
-  const folder = `./files`;
-
-  console.log("folder list");
-
-  if (fs.existsSync(folder)) {
-    const folders = fs
-      .readdirSync(folder)
-      .filter((file) => fs.statSync(`${folder}/${file}`).isDirectory());
-
-    res.status(200).json(folders);
-  } else {
-    res.status(200).json([]);
   }
 });
 

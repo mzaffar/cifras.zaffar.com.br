@@ -8,8 +8,6 @@ function ShowChord({ musicData, chord_name, showChordPosition }) {
     return chord;
   };
 
-  console.log("showChordPosition", showChordPosition);
-
   return (
     <div
       className="absolute"
