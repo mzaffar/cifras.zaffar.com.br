@@ -148,6 +148,15 @@ router.get("/import", async (req, res) => {
       res.json(err);
       return;
     }
+
+    fs.chmod(filePath, 0o755, (err) => {
+      if (err) {
+        console.error("Erro ao definir as permissões:", err);
+        return;
+      }
+      console.log("Permissões definidas com sucesso.");
+    });
+
     res.json(jsonData);
   });
 });
