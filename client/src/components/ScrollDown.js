@@ -3,27 +3,25 @@ import IconButton from "./IconButton";
 
 function ScrollDown() {
   const scrollDown = () => {
-    const duration = 2000; // Tempo de duração do scroll em milissegundos (1 segundo neste exemplo)
-    const startTime = performance.now(); // Tempo inicial da animação
+    const duration = 2000;
+    const startTime = performance.now();
 
     const halfWindowHeight = window.innerHeight / 2;
-    const startScrollY = window.scrollY; // Posição inicial do scroll
-
+    const startScrollY = window.scrollY;
     const animateScroll = (currentTime) => {
       const elapsedTime = currentTime - startTime;
       const progress = elapsedTime / duration;
 
       if (progress < 1) {
-        const easeProgress = easeOutQuart(progress); // Aplica uma função de easing para suavizar o movimento
+        const easeProgress = easeOutQuart(progress);
         const scrollY = startScrollY + easeProgress * halfWindowHeight;
         window.scrollTo(0, scrollY);
         requestAnimationFrame(animateScroll);
       } else {
-        window.scrollTo(0, startScrollY + halfWindowHeight); // Garante que a posição final seja exatamente a metade da janela
+        window.scrollTo(0, startScrollY + halfWindowHeight);
       }
     };
 
-    // Função de easing para suavizar o movimento (easeOutQuart neste exemplo)
     const easeOutQuart = (t) => 1 - --t * t * t * t;
 
     requestAnimationFrame(animateScroll);

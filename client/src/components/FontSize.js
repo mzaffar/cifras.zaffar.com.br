@@ -21,7 +21,7 @@ function FontSize({ fontSize, setFontSize }) {
         onClick={() => decreaseSize()}
       />
       <div className="bg-slate-800 px-2">
-        <Icon path={mdiFormatSize} size={1} />
+        <Icon path={mdiFormatSize} size={"1.8rem"} />
       </div>
       <IconButton
         className={"rounded-r rounded-l-none"}

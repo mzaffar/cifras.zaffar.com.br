@@ -1,4 +1,4 @@
-import { mdiArrowLeftCircle, mdiDotsVertical, mdiPencil } from "@mdi/js";
+import { mdiDotsVertical, mdiPencil } from "@mdi/js";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -32,6 +32,11 @@ function Show() {
   useEffect(() => {
     getMusicFile();
   }, []);
+
+  useEffect(() => {
+    if (musicData)
+      document.title = `${musicData.music.name} - ${musicData.artist.name}`;
+  }, [musicData]);
 
   useEffect(() => {
     adjustTextareaHeight();
@@ -216,7 +221,7 @@ function Show() {
 
   return (
     <MainContainer>
-      <Header>
+      <Header backTo={() => navigate(`/${folder}`)}>
         <IconButton
           path={mdiPencil}
           size={"1rem"}
@@ -236,17 +241,25 @@ function Show() {
         <Modal title="Opções">
           <div className="p-2 space-y-2">
             <SimpleButton
-              label="Excluir música"
+              label="Ver no Cifra Club"
+              color="bg-slate-800"
               className="text-center"
-              color="bg-red-800"
-              onClick={() => deleteMusicHandler()}
+              onClick={() =>
+                window.open(musicData.music.url_clifraclub, "_blank").focus()
+              }
             />
             <SimpleButton
               label={"Re-importar"}
               onClick={() => reimport()}
               className="text-center"
-              color="bg-blue-800"
+              color="bg-slate-800"
               loading={loading}
+            />
+            <SimpleButton
+              label="Excluir música"
+              className="text-center"
+              color="bg-red-800"
+              onClick={() => deleteMusicHandler()}
             />
 
             <SimpleButton
@@ -268,15 +281,6 @@ function Show() {
       )}
       <div className="bg-slate-800 p-2 ">
         <div className="container mx-auto flex items-center">
-          <div>
-            <IconButton
-              color="bg-slate-800"
-              path={mdiArrowLeftCircle}
-              size={"1.5rem"}
-              className={"py-3 text-slate-500"}
-              onClick={() => navigate(`/${folder}`)}
-            />
-          </div>
           <div>
             <div className="text-slate-400 text-2xl">
               {musicData.music.name}
@@ -307,21 +311,13 @@ function Show() {
               </div>
             )}
           </div>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 mr-2 md:mr-0">
             {/* Scroll Down */}
             <ScrollDown />
             {/* Scroller */}
             <Scroller />
             {/* Font Size */}
             <FontSize fontSize={fontSize} setFontSize={setFontSize} />
-            {/* Cifra Club Button */}
-            <SimpleButton
-              label="Cifra Club"
-              color="bg-slate-800"
-              onClick={() =>
-                window.open(musicData.music.url_clifraclub, "_blank").focus()
-              }
-            />
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import { mdiMinusThick, mdiPlusThick, mdiStop } from "@mdi/js";
+import { mdiClose, mdiMinusThick, mdiPlusThick, mdiStop } from "@mdi/js";
 import { useEffect, useState } from "react";
 import IconButton from "./IconButton";
 import SimpleButton from "./SimpleButton";
@@ -45,16 +45,6 @@ function Scroller() {
       {showControllees && (
         <div className="fixed top-2 right-2 bg-yellow-500 text-white text-center p-2 rounded z-10">
           <div className="flex">
-            <div className="mr-2">
-              <IconButton
-                className={"rounded"}
-                path={mdiStop}
-                size={"1rem"}
-                color="bg-yellow-800"
-                onClick={() => setIntervalScroll(0)}
-              />
-            </div>
-
             <div className="flex">
               <IconButton
                 className={"rounded-l rounded-r-none"}
@@ -72,16 +62,41 @@ function Scroller() {
                 onClick={() => incrementInterval()}
               />
             </div>
+
+            <div className="ml-2">
+              <IconButton
+                className={"rounded"}
+                path={mdiStop}
+                size={"1rem"}
+                color="bg-yellow-800"
+                onClick={() => setIntervalScroll(0)}
+              />
+            </div>
+
+            <div className="ml-2">
+              <IconButton
+                className={"rounded"}
+                path={mdiClose}
+                size={"1rem"}
+                color="bg-yellow-800"
+                onClick={() => {
+                  setIntervalScroll(0);
+                  setShowControllees(false);
+                }}
+              />
+            </div>
           </div>
         </div>
       )}
-      <div className="flex">
-        <SimpleButton
-          color="bg-slate-800"
-          label="Rolagem automatica"
-          onClick={() => setShowControllees(!showControllees)}
-        />
-      </div>
+      {!showControllees && (
+        <div className="flex">
+          <SimpleButton
+            color="bg-slate-800"
+            label="Rolagem automatica"
+            onClick={() => setShowControllees(!showControllees)}
+          />
+        </div>
+      )}
     </>
   );
 }

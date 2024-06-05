@@ -8,7 +8,6 @@ import MainContainer from "../components/MainContainer";
 import Modal from "../components/Modal";
 import ProgressBar from "../components/ProgressBar";
 import SimpleButton from "../components/SimpleButton";
-import Title from "../components/Title";
 import { config } from "../config";
 import { filePathToMusicName, filePathToUrl, slugToCamelCase } from "../utils";
 
@@ -24,6 +23,7 @@ function Folder() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    document.title = `Pasta: ${slugToCamelCase(folder)}`;
     getFiles();
   }, []);
 
@@ -69,7 +69,7 @@ function Folder() {
 
   return (
     <MainContainer>
-      <Header>
+      <Header title={`${slugToCamelCase(folder)}`} backTo={() => navigate(`/`)}>
         <SimpleButton
           label={"Importar música"}
           color="bg-blue-800"
@@ -83,7 +83,6 @@ function Folder() {
           onClick={() => setShowOptions(true)}
         />
       </Header>
-      <Title title={slugToCamelCase(folder)} />
 
       {showImportMusic && (
         <Modal title="Importar música">
@@ -151,10 +150,10 @@ function Folder() {
                   return (
                     <li
                       key={file}
-                      className=" py-1 px-2 border-b border-slate-700 hover:bg-slate-800 transition-colors duration-200"
+                      className="border-b border-slate-700 hover:bg-slate-800 transition-colors duration-200"
                     >
                       <a href={`/${folder}/${filePathToUrl(file)}`}>
-                        <div className="container mx-auto">
+                        <div className=" py-1 px-2  container mx-auto">
                           {filePathToMusicName(file, artist.name)}
                         </div>
                       </a>

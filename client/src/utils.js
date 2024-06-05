@@ -14,10 +14,4 @@ export const filePathToUrl = (file_path) => {
   return file_path.replace(".json", "");
 };
 
-export const fontSizes = [
-  "text-xs",
-  "text-sm",
-  "text-base",
-  "text-lg",
-  "text-xl",
-];
+export const fontSizes = ["text-xs", "text-sm", "text-base", "text-lg"];
