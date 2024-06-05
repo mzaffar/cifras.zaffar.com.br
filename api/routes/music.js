@@ -50,95 +50,115 @@ router.get("/import", async (req, res) => {
   }
 
   const url = req.query.url;
-  let browser;
-  try {
-    browser = await puppeteer.launch({
-      executablePath: "/usr/bin/google-chrome",
-      headless: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--dns-prefetch-disable",
-      ],
-    });
+  const browser = await puppeteer.launch({
+    executablePath: "/usr/bin/google-chrome",
+    headless: true,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--dns-prefetch-disable",
+    ],
+  });
+  const page = await browser.newPage();
+  await page.goto(url, { waitUntil: "load" });
+  const html = await page.content();
 
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "load" });
-    const html = await page.content();
+  const $ = cheerio.load(html);
 
-    const $ = cheerio.load(html);
+  $(".tablatura").remove();
+  $(".cifra_acordes--artista").remove();
 
-    $(".tablatura").remove();
-    $(".cifra_acordes--artista").remove();
+  const music_name = $(".t1").text();
+  const music_slug = slugify(music_name, { lower: true });
+  const artist_name = $(".t3").text();
+  const artist_slug = slugify(artist_name, { lower: true });
+  const music_key = $("#cifra_tom > a").text();
+  const music = $("pre").html();
 
-    const music_name = $(".t1").text();
-    const music_slug = slugify(music_name, { lower: true });
-    const artist_name = $(".t3").text();
-    const artist_slug = slugify(artist_name, { lower: true });
-    const music_key = $("#cifra_tom > a").text();
-    const music = $("pre").html();
+  const chords = $(".cifra_acordes  .chord");
 
-    const chords = $(".cifra_acordes  .chord");
+  const chordsArray = [];
 
-    const chordsArray = [];
+  chords.each((i, element) => {
+    const mount = $(element).attr("data-mount");
+    const tuning = $(element).attr("data-tuning");
 
-    chords.each((i, element) => {
-      const mount = $(element).attr("data-mount");
-      const tuning = $(element).attr("data-tuning");
+    const $c = cheerio.load(element);
+    const name = $c("strong").text();
 
-      const $c = cheerio.load(element);
-      const name = $c("strong").text();
+    const dataChords = {
+      mount,
+      tuning,
+      name,
+      fingers: [],
+      notes: [],
+    };
 
-      const dataChords = {
-        mount,
-        tuning,
-        name,
-        fingers: [],
-        notes: [],
+    const notes = $c(".chord-notes > span");
+
+    // loop through notes
+    notes.each((j, elementN) => {
+      let note = $(elementN).attr("title");
+      if (note) note = note.replace('"', "");
+      const note_play = $(elementN).text();
+
+      const noteData = {
+        note: note || "",
+        note_play: note_play || "",
       };
-
-      const notes = $c(".chord-notes > span");
-
-      // loop through notes
-      notes.each((j, elementN) => {
-        let note = $(elementN).attr("title");
-        if (note) note = note.replace('"', "");
-        const note_play = $(elementN).text();
-
-        const noteData = {
-          note: note || "",
-          note_play: note_play || "",
-        };
-        dataChords.notes[j] = noteData;
-      });
-
-      const fingers = $c(".chord-grid > .chord-note");
-      fingers.each((f, finger) => {
-        dataChords.fingers.push($(finger).text());
-      });
-
-      chordsArray.push(dataChords);
+      dataChords.notes[j] = noteData;
     });
 
-    // Envie os dados processados para o cliente
-    res.json({
-      music_name,
-      music_slug,
-      artist_name,
-      artist_slug,
-      music_key,
-      music,
+    const fingers = $c(".chord-grid > .chord-note");
+    fingers.each((f, finger) => {
+      dataChords.fingers.push($(finger).text());
+    });
+
+    chordsArray.push(dataChords);
+  });
+
+  const jsonData = {
+    path: `${req.query.folder}/${artist_slug}/${music_slug}.json`,
+    music: {
+      name: music_name,
+      slug: music_slug,
+      key: music_key,
+      music: music,
+      url_clifraclub: url,
       chords: chordsArray,
-    });
-  } catch (error) {
-    console.error("Erro ao importar página:", error);
-    res.status(500).json({ error: "Erro ao importar página." });
-  } finally {
-    // Certifique-se de fechar o navegador
-    if (browser) {
-      await browser.close();
-    }
+    },
+    artist: {
+      name: artist_name,
+      slug: artist_slug,
+    },
+  };
+  const jsonString = JSON.stringify(jsonData);
+
+  const artist_folder = `./files/${req.query.folder}/${artist_slug}`;
+
+  if (!fs.existsSync(artist_folder)) {
+    fs.mkdirSync(artist_folder);
   }
+
+  const filePath = `${artist_folder}/${music_slug}.json`;
+
+  fs.writeFile(filePath, jsonString, "utf-8", async (err) => {
+    if (err) {
+      res.json(err);
+      return;
+    }
+
+    fs.chmod(filePath, 0o755, (err) => {
+      if (err) {
+        console.error("Erro ao definir as permissões:", err);
+        return;
+      }
+      console.log("Permissões definidas com sucesso.");
+    });
+
+    await browser.close();
+    res.json(jsonData);
+  });
 });
 
 router.get("/delete", async (req, res) => {
