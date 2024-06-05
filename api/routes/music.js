@@ -50,6 +50,7 @@ router.get("/import", async (req, res) => {
   }
 
   const url = req.query.url;
+
   const browser = await puppeteer.launch({
     executablePath: "/usr/bin/google-chrome",
     headless: true,
@@ -59,8 +60,9 @@ router.get("/import", async (req, res) => {
       "--dns-prefetch-disable",
     ],
   });
+
   const page = await browser.newPage();
-  await page.goto(url, { waitUntil: "load" });
+  await page.goto(`${url}/imprimir.html`, { waitUntil: "load" });
   const html = await page.content();
   await browser.close();
 
@@ -69,12 +71,17 @@ router.get("/import", async (req, res) => {
   $(".tablatura").remove();
   $(".cifra_acordes--artista").remove();
 
-  const music_name = $(".t1").text();
+  const music_name = $(".js-title_color").text();
   const music_slug = slugify(music_name, { lower: true });
-  const artist_name = $(".t3").text();
+  const artist_name = $(".js-artist_color").text();
   const artist_slug = slugify(artist_name, { lower: true });
   const music_key = $("#cifra_tom > a").text();
-  const music = $("pre").html();
+  const music = $("pre");
+
+  let musicString = "";
+  music.each((i, element) => {
+    musicString += $(element).html();
+  });
 
   const chords = $(".cifra_acordes  .chord");
 
@@ -124,7 +131,7 @@ router.get("/import", async (req, res) => {
       name: music_name,
       slug: music_slug,
       key: music_key,
-      music: music,
+      music: musicString,
       url_clifraclub: url,
       chords: chordsArray,
     },
