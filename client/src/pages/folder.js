@@ -1,14 +1,17 @@
 import { mdiDotsVertical } from "@mdi/js";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import Header from "../components/Header";
 import IconButton from "../components/IconButton";
 import MainContainer from "../components/MainContainer";
 import Modal from "../components/Modal";
+import ProgressBar from "../components/ProgressBar";
 import SimpleButton from "../components/SimpleButton";
 import Title from "../components/Title";
 import { config } from "../config";
 import { filePathToMusicName, filePathToUrl, slugToCamelCase } from "../utils";
+
 function Folder() {
   const inputRef = useRef(null);
   const navigate = useNavigate();
@@ -45,6 +48,12 @@ function Folder() {
       .then((res) => {
         setLoading(false);
         navigate(`/${folder}/${res.artist.slug}/${res.music.slug}`);
+      })
+      .catch((err) => {
+        toast("Erro ao importar música. Tente novamente.", {
+          type: "error",
+        });
+        setLoading(false);
       });
   };
 
@@ -79,6 +88,7 @@ function Folder() {
       {showImportMusic && (
         <Modal title="Importar música">
           <div className="p-2">
+            {loading && <ProgressBar />}
             <input
               ref={inputRef}
               type="text"

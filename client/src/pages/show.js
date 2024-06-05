@@ -101,8 +101,15 @@ function Show() {
         toast("Música re-importada.", {
           type: "success",
         });
+        setShowOptions(false);
         setLoading(false);
         navigate(`/${folder}/${artist}/${music}`);
+      })
+      .catch((err) => {
+        toast("Erro ao re-importar música. Tente novamente.", {
+          type: "error",
+        });
+        setLoading(false);
       });
   };
 

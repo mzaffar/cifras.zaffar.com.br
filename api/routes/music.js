@@ -62,6 +62,7 @@ router.get("/import", async (req, res) => {
   const page = await browser.newPage();
   await page.goto(url, { waitUntil: "load" });
   const html = await page.content();
+  await browser.close();
 
   const $ = cheerio.load(html);
 
