@@ -142,7 +142,7 @@ router.get("/import", async (req, res) => {
 
   const filePath = `${artist_folder}/${music_slug}.json`;
 
-  fs.writeFile(filePath, jsonString, "utf-8", async (err) => {
+  fs.writeFile(filePath, jsonString, "utf-8", (err) => {
     if (err) {
       res.json(err);
       return;
@@ -156,7 +156,6 @@ router.get("/import", async (req, res) => {
       console.log("Permissões definidas com sucesso.");
     });
 
-    await browser.close();
     res.json(jsonData);
   });
 });
